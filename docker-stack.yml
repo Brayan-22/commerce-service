@@ -1,0 +1,30 @@
+services:
+  commerce-service:
+    image: commerce-service:latest
+    environment:
+      - CONFIG_SERVER_URL=http://config-server:9196
+      - JDBC_DATABASE_URL=jdbc:postgresql://artesanias-db:5432/artesanias
+      - JDBC_DATABASE_USERNAME=artesanias
+      - JDBC_DATABASE_PASSWORD=artesanias
+      - COMMERCE_SERVICE_PORT=9090
+      - HOST=${HOST}
+    networks:
+      - backend
+    volumes:
+      - commerce-service:/app
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+networks:
+  backend:
+    external: true
+volumes:
+  commerce-service:

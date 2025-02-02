@@ -12,12 +12,14 @@ import com.artesanias.ventas.repository.ProductoRepository;
 import com.artesanias.ventas.services.ICatalogoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,22 +30,28 @@ public class CatalogoService implements ICatalogoService {
     private final ProductoRepository productoRepository;
     private final CategoriaRepository categoriaRepository;
     @Override
-    public List<ProductoResponseDto> getCatalogo(int page, int size) throws PageableNotValidException {
+    public List<ProductoResponseDto> getCatalogo(int page, int size,String sortByPrice) throws PageableNotValidException {
         if (page < 0 || size < 0) throw new PageableNotValidException("Page and size must be greater than 0");
-        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Pageable pageable = PageRequest.of(page, size);
+        if (!Objects.isNull(sortByPrice)){
+            if ("ASC".equals(sortByPrice)) pageable = PageRequest.of(page, size, Sort.by("precio").ascending());
+            if ("DESC".equals(sortByPrice)) pageable = PageRequest.of(page, size, Sort.by("precio").descending());
+        }
         return productoRepository.findAll(pageable).getContent().stream().map(
                 pe -> ProductoResponseDto.builder()
+                        .id(pe.getId())
                         .nombre(pe.getNombre())
                         .descripcion(pe.getDescripcion())
                         .precio(pe.getPrecio())
                         .build()
-        ).collect(Collectors.toList());
+        ).toList();
     }
 
     @Override
     public ProductoResponseDto getProductoByNombre(String nombre) throws ProductNotFoundException {
         ProductoEntity productoEntity = productoRepository.findByNombre(nombre).orElseThrow(()-> new ProductNotFoundException("Product not found"));
         return ProductoResponseDto.builder()
+                .id(productoEntity.getId())
                 .nombre(productoEntity.getNombre())
                 .descripcion(productoEntity.getDescripcion())
                 .precio(productoEntity.getPrecio())
@@ -60,14 +68,21 @@ public class CatalogoService implements ICatalogoService {
                         .nombre(ce.getNombre())
                         .descripcion(ce.getDescripcion())
                         .build()
-        ).collect(Collectors.toList());
+        ).toList();
     }
 
     @Override
-    public List<ProductoResponseDto> getProductosByCategoria(Integer id, int page, int size) throws CategoriaNotFoundException, ProductNotFoundException {
-        CategoriaEntity categoriaEntity = categoriaRepository.findById(id).orElseThrow(()-> new CategoriaNotFoundException("Category not found"));;
-        List<ProductoResponseDto> productos = productoRepository.findProductoEntitiesByCategoria(categoriaEntity, PageRequest.of(page, size)).stream().map(
+    public List<ProductoResponseDto> getProductosByCategoria(Integer id, int page, int size,String sortByPrice) throws CategoriaNotFoundException, ProductNotFoundException {
+        CategoriaEntity categoriaEntity = categoriaRepository.findById(id).orElseThrow(()-> new CategoriaNotFoundException("Category not found"));
+        if (page < 0 || size < 0) throw new PageableNotValidException("Page and size must be greater than 0");
+        Pageable pageable = PageRequest.of(page, size);
+        if (!Objects.isNull(sortByPrice)){
+            if ("ASC".equals(sortByPrice)) pageable = PageRequest.of(page, size, Sort.by("precio").ascending());
+            if ("DESC".equals(sortByPrice)) pageable = PageRequest.of(page, size, Sort.by("precio").descending());
+        }
+        List<ProductoResponseDto> productos = productoRepository.findProductoEntitiesByCategoria(categoriaEntity, pageable).stream().map(
                 pe -> ProductoResponseDto.builder()
+                        .id(pe.getId())
                         .nombre(pe.getNombre())
                         .descripcion(pe.getDescripcion())
                         .precio(pe.getPrecio())

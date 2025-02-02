@@ -1,10 +1,10 @@
 spring:
   application:
-    name: ventas-service
-  config:
-    import: configserver:http://localhost:9196
+    name: commerce-service
 #  config:
-#    import: optional:configserver:http://localhost:9196
+#    import: configserver:http://localhost:9196
+  config:
+    import: optional:configserver:http://localhost:9196
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -16,8 +16,20 @@ spring:
     database: postgresql
   datasource:
     url: jdbc:postgresql://localhost:5432/artesanias
-    username: postgres
+    username: postgress
     password: artesanias
     driver-class-name: org.postgresql.Driver
 server:
   port: 9090
+  servlet:
+    context-path: /commerce
+springdoc:
+  open-api:
+    service:
+      title: commerce-service doc
+      version: 1.0.0
+      url: http://localhost:8080/commerce
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

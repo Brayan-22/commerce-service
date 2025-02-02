@@ -1,8 +1,10 @@
 spring:
   application:
-    name: ventas-service
+    name: commerce-service
+#  config:
+#    import: configserver:http://localhost:9196
   config:
-    import: configserver:${CONFIG_SERVER_URI:http://localhost:9196}
+    import: optional:configserver:${CONFIG_SERVER_URL}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -10,12 +12,24 @@ spring:
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: false
+    show-sql: true
     database: postgresql
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/artesanias}
-    username: ${DATASOURCE_USERNAME:postgres}
-    password: ${DATASOURCE_PASSWORD:artesanias}
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 server:
-  port: ${PORT:9090}
+  port: ${COMMERCE_SERVICE_PORT}
+  servlet:
+    context-path: /commerce
+springdoc:
+  open-api:
+    service:
+      title: commerce-service doc
+      version: 1.0.0
+      url: ${HOST}/commerce
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
