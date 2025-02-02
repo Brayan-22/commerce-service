@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: ventas-service
+  config:
+    import: configserver:${CONFIG_SERVER_URI:http://localhost:9196}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    database: postgresql
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/artesanias}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:artesanias}
+    driver-class-name: org.postgresql.Driver
+server:
+  port: ${PORT:9090}
