@@ -1,6 +1,6 @@
 services:
   commerce-service:
-    image: commerce-service:latest
+    image: brayan22/commerce-service:latest
     environment:
       - CONFIG_SERVER_URL=http://config-server:9196
       - JDBC_DATABASE_URL=jdbc:postgresql://artesanias-db:5432/artesanias
