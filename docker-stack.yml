@@ -3,11 +3,11 @@ services:
     image: brayan22/artesanias-commerce-service:latest
     environment:
       - CONFIG_SERVER_URL=http://artesanias-config-server:9196
-      - JDBC_DATABASE_URL=jdbc:postgresql://artesanias-database:5432/artesanias
-      - JDBC_DATABASE_USERNAME=postgres
-      - JDBC_DATABASE_PASSWORD=artesanias
+      - JDBC_DATABASE_URL=jdbc:postgresql://${RDS_URL}:5432/postgres
+      - JDBC_DATABASE_USERNAME=${DB_USERNAME}
+      - JDBC_DATABASE_PASSWORD=${DB_PASSWORD}
       - COMMERCE_SERVICE_PORT=9090
-      - HOST=http://artesanias.localhost
+      - HOST=https://restauranteapirest.brayandev.info
       - EUREKA_URI=http://artesanias-discovery-server:8761/eureka/
       - HOSTNAME=artesanias-commerce-service
     hostname: artesanias-commerce-service
