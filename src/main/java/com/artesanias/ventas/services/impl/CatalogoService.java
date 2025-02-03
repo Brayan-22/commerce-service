@@ -40,6 +40,7 @@ public class CatalogoService implements ICatalogoService {
         return productoRepository.findAll(pageable).getContent().stream().map(
                 pe -> ProductoResponseDto.builder()
                         .id(pe.getId())
+                        .urlImagen(pe.getUrlImagen())
                         .nombre(pe.getNombre())
                         .descripcion(pe.getDescripcion())
                         .precio(pe.getPrecio())
@@ -53,6 +54,7 @@ public class CatalogoService implements ICatalogoService {
         return ProductoResponseDto.builder()
                 .id(productoEntity.getId())
                 .nombre(productoEntity.getNombre())
+                .urlImagen(productoEntity.getUrlImagen())
                 .descripcion(productoEntity.getDescripcion())
                 .precio(productoEntity.getPrecio())
                 .build();
@@ -83,6 +85,7 @@ public class CatalogoService implements ICatalogoService {
         List<ProductoResponseDto> productos = productoRepository.findProductoEntitiesByCategoria(categoriaEntity, pageable).stream().map(
                 pe -> ProductoResponseDto.builder()
                         .id(pe.getId())
+                        .urlImagen(pe.getUrlImagen())
                         .nombre(pe.getNombre())
                         .descripcion(pe.getDescripcion())
                         .precio(pe.getPrecio())

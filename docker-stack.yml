@@ -1,30 +1,22 @@
 services:
-  commerce-service:
-    image: brayan22/commerce-service:latest
+  artesanias-commerce-service:
+    image: brayan22/artesanias-commerce-service:latest
     environment:
-      - CONFIG_SERVER_URL=http://config-server:9196
-      - JDBC_DATABASE_URL=jdbc:postgresql://artesanias-db:5432/artesanias
-      - JDBC_DATABASE_USERNAME=artesanias
+      - CONFIG_SERVER_URL=http://artesanias-config-server:9196
+      - JDBC_DATABASE_URL=jdbc:postgresql://artesanias-database:5432/artesanias
+      - JDBC_DATABASE_USERNAME=postgres
       - JDBC_DATABASE_PASSWORD=artesanias
       - COMMERCE_SERVICE_PORT=9090
-      - HOST=${HOST}
+      - HOST=http://artesanias.localhost
+      - EUREKA_URI=http://artesanias-discovery-server:8761/eureka/
+      - HOSTNAME=artesanias-commerce-service
+    hostname: artesanias-commerce-service
     networks:
       - backend
-    volumes:
-      - commerce-service:/app
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
 networks:
   backend:
     external: true
-volumes:
-  commerce-service:

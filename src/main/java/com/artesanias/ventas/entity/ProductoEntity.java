@@ -22,6 +22,9 @@ public class ProductoEntity {
     @Column(name = "\"desc_producto\"")
     private String descripcion;
 
+    @Column(name = "\"url_imagen\"")
+    private String urlImagen;
+    
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "\"id_categoriapk\"")
     private CategoriaEntity categoria;
