@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ public class CatalogoService implements ICatalogoService {
 
     private final ProductoRepository productoRepository;
     private final CategoriaRepository categoriaRepository;
+    @Transactional(readOnly = true)
     @Override
     public List<ProductoResponseDto> getCatalogo(int page, int size,String sortByPrice) throws PageableNotValidException {
         if (page < 0 || size < 0) throw new PageableNotValidException("Page and size must be greater than 0");
@@ -44,6 +46,7 @@ public class CatalogoService implements ICatalogoService {
                         .nombre(pe.getNombre())
                         .descripcion(pe.getDescripcion())
                         .precio(pe.getPrecio())
+                        .id_categoria(pe.getCategoria().getId())
                         .build()
         ).toList();
     }

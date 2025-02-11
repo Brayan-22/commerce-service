@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +38,7 @@ public class CatalogoController {
     }
 
 
+
     @GetMapping(value = "/producto/{idCategoria}",produces = MediaType.APPLICATION_JSON_VALUE,path = "/producto/{idCategoria}")
     public ResponseEntity<List<ProductoResponseDto>> getProductosByCategoria(@Parameter(description = "Id categoria",required = true)
                                                      @PathVariable Integer idCategoria,
@@ -47,4 +47,3 @@ public class CatalogoController {
         return ResponseEntity.ok(catalogoService.getProductosByCategoria(idCategoria,page,size,sortbyprice));
     }
 }
-

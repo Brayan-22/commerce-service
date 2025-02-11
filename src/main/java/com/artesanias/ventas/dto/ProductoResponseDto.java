@@ -15,4 +15,5 @@ public class ProductoResponseDto {
     private Double precio;
     private String descripcion;
     private String urlImagen;
+    private Integer id_categoria;
 }
